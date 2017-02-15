@@ -1,0 +1,25 @@
+#original list
+http://www.cubetutor.com/viewcube/5936
+
+#extract cardnames:
+grep -o http://d1f83aa4yffcdn.cloudfront.net[/A-Za-z%\.0-9\&\;\,\#\'\-]* {filename}.html >> list.txt
+
+
+#edit cardnames
+sed -i "s/&#39;/'/g" list.txt
+
+
+#make an image directory, then fill that directory with the requested images
+mkdir images; COUNTER=0; for i in $(cat list.txt); do let COUNTER=COUNTER+1; wget -O images/${COUNTER}_$(echo $i | cut -d '/' -f 5-) $i; done
+
+
+#format images
+for i in $(ls images); do echo -n .; convert -rotate 90 "images/$i" "images/$i"; done
+
+#more formatting - maybe dont use
+mkdir exp; for i in $(ls images); do echo -n .; convert images/$i[312x220] exp/$i; done
+
+then run "makecube.py" to make an html page containing the cards
+open in word and print!
+
+
